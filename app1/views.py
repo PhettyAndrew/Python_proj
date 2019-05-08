@@ -7,6 +7,14 @@ class MemberListView(ListView):
     model = Member
     template_name = 'app1/index.html'
     context_object_name = 'profiles'
+    ordering = ['name']
+
+    def get_queryset(self):
+        query=self.request.GET.get('q')
+        if query:
+            return Member.objects.filter(name__icontains=query) | Member.objects.filter( occupation__icontains=query)
+        else:
+            return Member.objects.all()
 
 class MemberCreateView(CreateView):
     model = Member
